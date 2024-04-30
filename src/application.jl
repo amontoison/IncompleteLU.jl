@@ -181,34 +181,11 @@ end
 
 function adjoint_forward_substitution!(F::ILUFactorization, y::AbstractVector)
     ldiv!(LowerTriangular(F.U'), y)
-    # U = F.U
-    # @inbounds for col = 1 : U.n
-    #     y[col] /= U.nzval[U.colptr[col]]
-    # end
-    # @inbounds for col = 1 : U.n
-    #     for idx = U.colptr[col] + 1 : U.colptr[col + 1] - 1
-    #         y[U.rowval[idx]] -= (U.nzval[idx] / U.nzval[U.colptr[U.rowval[idx]]]) * y[col]
-    #     end
-    # end
-
     y
 end
 
 function adjoint_forward_substitution!(F::ILUFactorization, y::AbstractMatrix)
     ldiv!(LowerTriangular(F.U'), y)
-    # U = F.U
-    # p = size(y, 2)
-    # @inbounds for c = 1 : p
-    #     @inbounds for col = 1 : U.n
-    #         y[col,c] /= U.nzval[U.colptr[col]]
-    #     end
-    #     @inbounds for col = 1 : U.n
-    #         for idx = U.colptr[col] + 1 : U.colptr[col + 1] - 1
-    #             y[U.rowval[idx],c] -= (U.nzval[idx] / U.nzval[U.colptr[U.rowval[idx]]]) * y[col,c]
-    #         end
-    #     end
-    # end
-
     y
 end
 
