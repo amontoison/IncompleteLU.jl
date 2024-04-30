@@ -1,9 +1,10 @@
 module IncompleteLU
 
+using LinearAlgebra: Factorization, AdjointFactorization, LowerTriangular
 using SparseArrays
 using Base: @propagate_inbounds
 
-struct ILUFactorization{Tv,Ti}
+struct ILUFactorization{Tv,Ti} <: Factorization{Tv}
     L::SparseMatrixCSC{Tv,Ti}
     U::SparseMatrixCSC{Tv,Ti}
 end
