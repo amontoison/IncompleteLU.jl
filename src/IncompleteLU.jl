@@ -1,6 +1,6 @@
 module IncompleteLU
 
-using LinearAlgebra: Factorization, AdjointFactorization, LowerTriangular
+using LinearAlgebra: Factorization, AdjointFactorization, LowerTriangular, UnitLowerTriangular, UpperTriangular
 using SparseArrays
 using Base: @propagate_inbounds
 
