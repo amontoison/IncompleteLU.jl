@@ -84,7 +84,7 @@ end
 
         adjoint_forward_substitution!(v, F, x)
         adjoint_forward_substitution!(F, x)
-        ldiv!(LowerTriangular(A'), y)
+        ldiv!(LowerTriangular(A), y)
 
         @test v ≈ y
         @test x ≈ y
@@ -96,7 +96,7 @@ end
 
         adjoint_forward_substitution!(v, F, x)
         adjoint_forward_substitution!(F, x)
-        ldiv!(LowerTriangular(A'), y)
+        ldiv!(LowerTriangular(A), y)
 
         @test v ≈ y
         @test x ≈ y
@@ -111,7 +111,7 @@ end
 
         adjoint_backward_substitution!(v, F, x)
         adjoint_backward_substitution!(F, x)
-        ldiv!(UnitUpperTriangular(A'), y)
+        ldiv!(UnitLowerTriangular(A)', y)
 
         @test v ≈ y
         @test x ≈ y
@@ -122,7 +122,7 @@ end
 
         adjoint_backward_substitution!(v, F, x)
         adjoint_backward_substitution!(F, x)
-        ldiv!(UnitUpperTriangular(A'), y)
+        ldiv!(UnitLowerTriangular(A)', y)
 
         @test v ≈ y
         @test x ≈ y
@@ -197,8 +197,8 @@ end
         w = copy(x)
 
         ldiv!(ALU, x)
-        ldiv!(LowerTriangular(LU.U'), y)
-        ldiv!(UnitUpperTriangular(LU.L'), y)
+        ldiv!(LowerTriangular(LU.U), y)
+        ldiv!(UnitLowerTriangular(LU.L)', y)
 
         @test x ≈ y
         @test ALU \ z == x
@@ -213,8 +213,8 @@ end
         w = copy(x)
 
         ldiv!(ALU, x)
-        ldiv!(LowerTriangular(LU.U'), y)
-        ldiv!(UnitUpperTriangular(LU.L'), y)
+        ldiv!(LowerTriangular(LU.U), y)
+        ldiv!(UnitLowerTriangular(LU.L)', y)
 
         @test x ≈ y
         @test ALU \ z == x
