@@ -63,7 +63,7 @@ function backward_substitution!(F::ILUFactorization, y::AbstractVector)
             y[col] -= U.nzval[idx] * y[U.rowval[idx]]
         end
 
-        # Final answer for y[col]
+        # Final value for y[col]
         y[col] /= U.nzval[U.colptr[col]]
     end
 
@@ -82,7 +82,7 @@ function backward_substitution!(F::ILUFactorization, y::AbstractMatrix)
                 y[col,c] -= U.nzval[idx] * y[U.rowval[idx],c]
             end
 
-            # Final answer for y[col]
+            # Final value for y[col,c]
             y[col,c] /= U.nzval[U.colptr[col]]
         end
     end
@@ -180,12 +180,33 @@ function forward_substitution!(v::AbstractMatrix, F::ILUFactorization, y::Abstra
 end
 
 function adjoint_forward_substitution!(F::ILUFactorization, y::AbstractVector)
-    ldiv!(LowerTriangular(F.U'), y)
+    U = F.U
+    @inbounds for col = 1 : U.n
+        # Final value for y[col]
+        y[col] /= U.nzval[U.colptr[col]]
+
+        for idx = U.colptr[col] + 1 : U.colptr[col + 1] - 1
+            y[U.rowval[idx]] -= U.nzval[idx] * y[col]
+        end
+    end
+
     y
 end
 
 function adjoint_forward_substitution!(F::ILUFactorization, y::AbstractMatrix)
-    ldiv!(LowerTriangular(F.U'), y)
+    U = F.U
+    p = size(y, 2)
+    @inbounds for c = 1 : p
+        @inbounds for col = 1 : U.n
+            # Final value for y[col,c]
+            y[col,c] /= U.nzval[U.colptr[col]]
+
+            for idx = U.colptr[col] + 1 : U.colptr[col + 1] - 1
+                y[U.rowval[idx],c] -= U.nzval[idx] * y[col,c]
+            end
+        end
+    end
+
     y
 end
 
